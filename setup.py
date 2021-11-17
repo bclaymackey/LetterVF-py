@@ -5,6 +5,8 @@ setup(name='LetterVF',
       description='automatic cluster analysis of phonemic verbal fluency task data',
       author='Brandon C. Mackey',
       author_email='bclaymackey@gmail.com',
-      url='https://github.com/Visscher-Lab/LetterVF'
-      long_description=open('README.txt').read()
+      packages=['LetterVF',]
+      url='https://github.com/Visscher-Lab/LetterVF',
+      long_description=open('README.txt').read(),
+      license='MIT license'
      )
