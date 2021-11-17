@@ -3,6 +3,18 @@ import numpy as np
 
 #read cmudict 
 def getPronDict(character, pron_dict_path, removal_list_path=None, addendum_path=None):
+    """Create a pronunciation dictionary containing only words which begin with the target letter.
+    Args:
+        character: target letter
+        pron_dict_dath: filepath for the full pronunciation dictionary (i.e., all letters)
+        removal_list_path (optional): filepath for a csv file which contains words to be removed from
+                                      the pronunciation dictionary
+        addendum_path (optional): filepath for a csv file which contains new words (and their pronunciations) 
+                                  to be added to the pronunciation dictionary
+
+    Returns:
+        pronunciation dictionary containing only words which begin with the target letter
+    """
     Dict = []
     with open(pron_dict_path, 'r') as fulldict:
         dictionary = fulldict.readlines()
@@ -21,6 +33,14 @@ def getPronDict(character, pron_dict_path, removal_list_path=None, addendum_path
 
 
 def expandPronDict(pron_dict, addendum_path):
+    """Use an addendum csv file to add words to a target letter's pronunciation dictionary.
+    Args:
+        pron_dict: a target letter's pronunciation dictionary created using getPronDict()
+        addendum_path: filepath for a csv file which contains new words (and their pronunciations) 
+                       to be added to the pronunciation dictionary
+    Returns:
+        an updated pronunciation dictionary which contains the new words
+    """
     #need to update this to read first line
     with open(addendum_path, 'r') as add_list:
         lines = add_list.readlines()
@@ -37,6 +57,14 @@ def expandPronDict(pron_dict, addendum_path):
 
 
 def truncatePronDict(pron_dict, removal_list_path):
+    """Use a csv file to remove words from a target letter's pronunciation dictionary.
+    Args:
+        pron_dict: a target letter's pronunciation dictionary created using getPronDict()
+        removal_list_path: filepath for a csv file which contains words to be removed from the pronunciation dictionary
+
+    Returns:
+        an updated pronunciation dictionary which no longer contains the words to be removed
+    """
     #need to update this to read first line
     to_be_removed = []
     with open(removal_list_path, 'r') as rem_list:
@@ -53,6 +81,14 @@ def truncatePronDict(pron_dict, removal_list_path):
 
 #create list of intrusions
 def findIntrusions(pron_dict, data_file_path):
+    """Use a target letter's pronunciation dictionary to identify and return a list of intrusions contained in a data file.
+    Args:
+        pron_dict: a target letter's pronunciation dictionary created using getPronDict()
+        data_file_path: filepath for a csv file which contains phonemic VFT data to be analyzed
+
+    Returns:
+        a list of intrusions found in a data file
+    """
     data = preproc(data_file_path)
     intrusions = []
     pron_dict = [pron_dict[item].split() for item in range(len(pron_dict))]
@@ -64,6 +100,13 @@ def findIntrusions(pron_dict, data_file_path):
 
 
 def findPerseverations(data_file_path):
+    """Find and return a list of perseverations (i.e., repitions within the same response list) contained in a data file.
+    Args:
+        data_file_path: filepath for a csv file which contains phonemic VFT data to be analyzed
+
+    Returns:
+        a list of perseverations (i.e., repitions within the same response list) contained in a data file
+    """
     data = preproc(data_file_path)
     temp_list = []
     perseverations = []
@@ -76,6 +119,13 @@ def findPerseverations(data_file_path):
 
 
 def preproc(data_file_path):
+    """Read data from a data file and return it in a python list that can be used for analysis.
+    Args:
+        data_file_path: filepath for a csv file which contains phonemic VFT data to be analyzed
+
+    Returns:
+        a python list that contains the data from the datafile
+    """
     with open(data_file_path, 'r') as data:
         next(data)
         data = data.readlines()
@@ -86,6 +136,14 @@ def preproc(data_file_path):
 
 
 def buildPronList(pron_dict, data_file_path):
+    """Return a list of words (and their pronunciations) contained within a data file.
+    Args:
+        pron_dict: a target letter's pronunciation dictionary created using getPronDict()
+        data_file_path: filepath for a csv file which contains phonemic VFT data to be analyzed
+
+    Returns:
+        a list of the words (and their pronunciations) contained within a data file
+    """
     data = preproc(data_file_path)
     PronunciationList = []
     
@@ -100,6 +158,14 @@ def buildPronList(pron_dict, data_file_path):
 
 
 def beginningBiphone(word, prev_word):
+    """Determine whether two words have the same first 2 phonemes.
+    Args:
+        word: any word and it's pronunciation as a list of lists
+        preword: aany word and it's pronunciation as a list of lists
+        
+    Returns:
+        1 if the two words have the same first 2 phonemes, 0 otherwise
+    """
     if word == '' or prev_word == '':
         return 0
     if word[1] == prev_word[1] and word[2] == prev_word[2] and len(word) > 2 and len(prev_word) > 2:
@@ -109,6 +175,14 @@ def beginningBiphone(word, prev_word):
 
 
 def endingBiphone(word, prev_word):
+    """Determine whether two words have the same last 2 phonemes.
+    Args:
+        word: any word and it's pronunciation as a list of lists
+        preword: aany word and it's pronunciation as a list of lists
+
+    Returns:
+        1 if the two words have the same last 2 phonemes, 0 otherwise
+    """
     if word == '' or prev_word == '':
         return 0
     if word[-1] == prev_word[-1] and word[-2] == prev_word[-2] and len(word) > 2 and len(prev_word) > 2:
@@ -118,6 +192,13 @@ def endingBiphone(word, prev_word):
 
 
 def findRhyme(word):
+    """Find the last syllable in a word.
+    Args:
+        word: any word and it's pronunciation as a list of lists
+
+    Returns:
+        the last syllable of a word, or 'no vowel' if the word contains no vowel sounds
+    """
     temp = []
     vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
     i = -1
@@ -133,6 +214,14 @@ def findRhyme(word):
 
 
 def rhyme(word, prev_word):
+    """Determine whether two words rhyme (i.e., syllabic rhyme).
+    Args:
+        word: any word and it's pronunciation as a list of lists
+        preword: aany word and it's pronunciation as a list of lists
+
+    Returns:
+        1 if the two words rhyme syllabically, 0 otherwise
+    """
     if word == '' or prev_word == '':
         return 0
     rhyme1 = findRhyme(word)
@@ -146,6 +235,13 @@ def rhyme(word, prev_word):
 
 
 def firstLetters(word, prev_word, num_of_letters=2):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     if word == '' or prev_word == '':
         return 0
     elif len(word[0]) < num_of_letters or len(prev_word[0]) < num_of_letters:
@@ -157,6 +253,13 @@ def firstLetters(word, prev_word, num_of_letters=2):
 
 
 def editDist(word, prev_word, max_dist):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
 #You really need to double check this, had to make some serious edit for levDist in terms of logic
     
     if word == '' or prev_word == '':
@@ -195,6 +298,13 @@ def editDist(word, prev_word, max_dist):
         return 0
 
 def levDist(word, prev_word, max_dist):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     
     if word == '' or prev_word == '':
         return 0
@@ -239,6 +349,13 @@ def levDist(word, prev_word, max_dist):
 
 
 def homophone(word, prev_word):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     if word == '' or prev_word == '':
         return 0
     if word[0] != prev_word[0] and word[1:] == prev_word[1:]:
@@ -248,6 +365,13 @@ def homophone(word, prev_word):
 
 
 def isSwitch(clust_list, clust_cats):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     first = True
     for item in range(len(clust_list)):
         
@@ -276,6 +400,13 @@ def isSwitch(clust_list, clust_cats):
 
 
 def checkPerseverations(clust_list):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     part_id = clust_list[0][0]
     list_no = clust_list[0][1]
     check_pers = []
@@ -296,6 +427,13 @@ def checkPerseverations(clust_list):
 
 
 def clustSize(switch_list):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     size = 1
     for item in range(len(switch_list)):
         
@@ -324,6 +462,13 @@ def clustSize(switch_list):
 
 
 def inversePronDict(target_let, pron_dict_path):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     Dict = []
     with open(pron_dict_path, 'r') as fulldict:
         dictionary = fulldict.readlines()
@@ -337,6 +482,13 @@ def inversePronDict(target_let, pron_dict_path):
 
 
 def intrusionType(intrusion, target_let, pron_dict_path):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     pron_dict = inversePronDict(larget_let, pron_dict_path)
     for word in pron_dict:
         if intrusion[1] == word[1]:
@@ -346,6 +498,13 @@ def intrusionType(intrusion, target_let, pron_dict_path):
 
 
 def findClusters(pron_dict, data_file_path, include_beg_biphone=True, include_end_biphone=True, include_rhyme=True, first_letters=None, edit_dist=None, include_homophone=False, lev_dist=None):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     data = preproc(data_file_path)
     pron_list = buildPronList(pron_dict, data_file_path)
     clust_list = []
@@ -456,6 +615,13 @@ def findClusters(pron_dict, data_file_path, include_beg_biphone=True, include_en
 
 
 def clustSummary(clust_list, include_intrusions=True):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     
     summary = []
     clustSizes = 0
@@ -513,6 +679,13 @@ def clustSummary(clust_list, include_intrusions=True):
 
 
 def sumExport(clust_list, clust_sum, output_path):
+    """
+    Args:
+        ToDo
+
+    Returns:
+        ToDo
+    """
     
     workbook = xl.Workbook(output_path)
     ws_clust_sum = workbook.add_worksheet('Analysis_Summary')
