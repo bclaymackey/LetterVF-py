@@ -3,7 +3,7 @@ The phonemic verbal fluency task is a common cognitive assessment of language an
 
 ## More Information
 More information regarding LetterVF and how to use it can be found here:
-[preprint](10.31234/osf.io/wavqu)
+[preprint DOI: 10.31234/osf.io/wavqu](10.31234/osf.io/wavqu)
 
 ## License
 [MIT License](https://choosealicense.com/licenses/mit/)
