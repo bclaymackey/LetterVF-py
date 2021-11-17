@@ -6,4 +6,5 @@ setup(name='LetterVF',
       author='Brandon C. Mackey',
       author_email='bclaymackey@gmail.com',
       url='https://github.com/Visscher-Lab/LetterVF'
+      long_description=open('README.txt').read()
      )
