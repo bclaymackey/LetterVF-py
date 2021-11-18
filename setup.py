@@ -8,5 +8,7 @@ setup(name='LetterVF',
       packages=['LetterVF'],
       url='https://github.com/Visscher-Lab/LetterVF',
       long_description=open('README.txt').read(),
-      license='MIT license'
+      license='MIT license',
+      install_requires=['xlsxwriter',
+                        'numpy']
      )
