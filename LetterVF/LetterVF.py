@@ -161,7 +161,7 @@ def beginningBiphone(word, prev_word):
     """Determine whether two words have the same first 2 phonemes.
     Args:
         word: any word and it's pronunciation as a list of lists
-        preword: aany word and it's pronunciation as a list of lists
+        preword: any word and it's pronunciation as a list of lists
         
     Returns:
         1 if the two words have the same first 2 phonemes, 0 otherwise
@@ -178,7 +178,7 @@ def endingBiphone(word, prev_word):
     """Determine whether two words have the same last 2 phonemes.
     Args:
         word: any word and it's pronunciation as a list of lists
-        preword: aany word and it's pronunciation as a list of lists
+        preword: any word and it's pronunciation as a list of lists
 
     Returns:
         1 if the two words have the same last 2 phonemes, 0 otherwise
@@ -217,7 +217,7 @@ def rhyme(word, prev_word):
     """Determine whether two words rhyme (i.e., syllabic rhyme).
     Args:
         word: any word and it's pronunciation as a list of lists
-        preword: aany word and it's pronunciation as a list of lists
+        preword: any word and it's pronunciation as a list of lists
 
     Returns:
         1 if the two words rhyme syllabically, 0 otherwise
@@ -235,12 +235,15 @@ def rhyme(word, prev_word):
 
 
 def firstLetters(word, prev_word, num_of_letters=2):
-    """
+    """Determine whether two words begin with the same letters (the number of which is determined by the user). 
     Args:
-        ToDo
+        word: any word and it's pronunciation as a list of lists
+        preword: any word and it's pronunciation as a list of lists
+        num_of_letters: the number of starting letters that the two words must have in common in order
+                        to return true
 
     Returns:
-        ToDo
+        1 if the two words have the same starting letters, 0 otherwise
     """
     if word == '' or prev_word == '':
         return 0
@@ -253,14 +256,18 @@ def firstLetters(word, prev_word, num_of_letters=2):
 
 
 def editDist(word, prev_word, max_dist):
-    """
+    """Return whether the edit distance between the pronunciations of two words is less than the specified threshold.
     Args:
-        ToDo
+        word: any word and it's pronunciation as a list of lists
+        preword: any word and it's pronunciation as a list of lists
+        max_dist: the maximum edit distance that should be allowed between the pronunciations of the two words
 
     Returns:
-        ToDo
+        1 if the edit distance between the pronunciations of the two words is less than or equal to the maximum
+        distance threshold, 0 otherwise
     """
-#You really need to double check this, had to make some serious edit for levDist in terms of logic
+#levDist() recommended over editDist
+#TODO check this function
     
     if word == '' or prev_word == '':
         return 0
@@ -298,12 +305,15 @@ def editDist(word, prev_word, max_dist):
         return 0
 
 def levDist(word, prev_word, max_dist):
-    """
+    """Return whether the Levenshtein distance between the pronunciations of two words is less than the specified threshold.
     Args:
-        ToDo
+        word: any word and it's pronunciation as a list of lists
+        preword: any word and it's pronunciation as a list of lists
+        max_dist: the maximum Levenshtein distance that should be allowed between the pronunciations of the two words
 
     Returns:
-        ToDo
+        1 if the Levenshtein distance between the pronunciation of the two words is less than or equal to the maximum
+        distance threshold, 0 otherwise
     """
     
     if word == '' or prev_word == '':
@@ -349,12 +359,13 @@ def levDist(word, prev_word, max_dist):
 
 
 def homophone(word, prev_word):
-    """
+    """Determines whether two words are homophones (i.e., have the exact same pronunciations).
     Args:
-        ToDo
+        word: any word and it's pronunciation as a list of lists
+        preword: any word and it's pronunciation as a list of lists
 
     Returns:
-        ToDo
+        1 if the two words have the exact same pronunciations, 0 otherwise
     """
     if word == '' or prev_word == '':
         return 0
@@ -365,12 +376,14 @@ def homophone(word, prev_word):
 
 
 def isSwitch(clust_list, clust_cats):
-    """
+    """Modify a list containing clustering information for a set of words so that the list includes whether a switch occurs 
+       between any pair of words.
     Args:
-        ToDo
+        clust_list: a list of lists which contains clustering informationfor a set of words
+        clust_cats: the number of clustering categories included in the analysis of the set of words
 
     Returns:
-        ToDo
+        a modified list of lists containing clustering and switching information
     """
     first = True
     for item in range(len(clust_list)):
@@ -400,12 +413,12 @@ def isSwitch(clust_list, clust_cats):
 
 
 def checkPerseverations(clust_list):
-    """
+    """Identify perseverations in a list containing clustering information for a set of words.
     Args:
-        ToDo
+        clust_list: a list of lists which contains clustering informationfor a set of words
 
     Returns:
-        ToDo
+        a modified list of lists containing clustering information in which perseverations are identified
     """
     part_id = clust_list[0][0]
     list_no = clust_list[0][1]
@@ -427,12 +440,12 @@ def checkPerseverations(clust_list):
 
 
 def clustSize(switch_list):
-    """
+    """Modify a list containing clustering information for a set of words so that the list includes the sizes of clusters.
     Args:
-        ToDo
+        clust_list: a list of lists which contains clustering informationfor a set of words
 
     Returns:
-        ToDo
+        a modified list of lists containing clustering information which includes the sizes of clusters
     """
     size = 1
     for item in range(len(switch_list)):
@@ -462,12 +475,13 @@ def clustSize(switch_list):
 
 
 def inversePronDict(target_let, pron_dict_path):
-    """
+    """Create a pronunciation dictionary containing only words which do not begin with the target letter.
     Args:
-        ToDo
+        target_let: target letter
+        pron_dict_dath: filepath for the full pronunciation dictionary (i.e., all letters)
 
     Returns:
-        ToDo
+        pronunciation dictionary containing only words which do not begin with the target letter
     """
     Dict = []
     with open(pron_dict_path, 'r') as fulldict:
@@ -482,12 +496,15 @@ def inversePronDict(target_let, pron_dict_path):
 
 
 def intrusionType(intrusion, target_let, pron_dict_path):
-    """
+    """Determine whether an intrusion is a typical intrusion, or a 'sensible intrusion,' where a sensible intrusion is a word which does not begin
+       which the target letter, but which does begin with a sound that is sometimes produced by the target letter.
     Args:
-        ToDo
+        intrusion: a word which does not begin with the target letter
+        target_let: target letter
+        pron_dict_path: filepath for the full pronunciation dictionary (i.e., all letters)
 
     Returns:
-        ToDo
+        'sensible intrusion' if the word is a sensible intrusion (as defined above), 'intrusion' otherwise
     """
     pron_dict = inversePronDict(larget_let, pron_dict_path)
     for word in pron_dict:
